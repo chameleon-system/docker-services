@@ -17,7 +17,7 @@ RUN git clone -b php7 --single-branch https://github.com/php-memcached-dev/php-m
        ) \
     && rm -rf php-memcached \
     && docker-php-ext-enable memcached \
-    && docker-php-ext-install -j$(nproc) opcache
+    && docker-php-ext-install -j$(nproc) opcache mcrypt iconv mbstring
 
 # Adding layer for imagemagick. This adds A LOT of extra payload to this docker.
 # Remove it if you don't need it
