@@ -2,12 +2,14 @@ FROM php:5.6-fpm
 
 # Adding some basic stuff to make chameleon run
 RUN apt-get update && apt-get install -y \
+    aspell \
+    aspell-de \
     libmcrypt-dev \
     libmemcached-dev \
     zlib1g-dev \
     && pecl install memcached \
     && docker-php-ext-enable memcached \
-    && docker-php-ext-install -j$(nproc) iconv mcrypt mbstring
+    && docker-php-ext-install -j$(nproc) iconv mcrypt mbstring pdo_mysql
 
 # Adding layer for imagemagick. This adds A LOT of extra payload to this docker.
 # Remove it if you don't need it
