@@ -1,0 +1,28 @@
+[mysqld]
+
+sql_mode=NO_ENGINE_SUBSTITUTION,NO_AUTO_CREATE_USER
+
+max_allowed_packet = 104857600
+
+collation-server = utf8_unicode_ci
+character-set-server = utf8
+
+innodb_buffer_pool_size = 256M
+key_buffer = 128M
+open-files-limit = 65535
+table_open_cache = 50000
+table_definition_cache = 50000
+sort_buffer_size = 2M
+read_buffer_size = 2M
+read_rnd_buffer_size = 2M
+myisam_sort_buffer_size = 128M
+thread_cache_size = 64
+query_cache_type = 1
+query_cache_size = 128M
+query_cache_limit = 4M
+max_connections = 255
+tmp_table_size = 128M
+max_heap_table_size = 128M
+bulk_insert_buffer_size = 16M
+join_buffer_size = 2M
+
