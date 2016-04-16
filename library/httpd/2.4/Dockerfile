@@ -5,6 +5,7 @@ FROM httpd:2.4
 COPY config/httpd.conf /usr/local/apache2/conf/httpd.conf
 COPY config/ssl/ssl-cert-snakeoil.pem /usr/local/apache2/conf/server.crt
 COPY config/ssl/ssl-cert-snakeoil.key /usr/local/apache2/conf/server.key
+COPY config/sites-enabled/vhost.conf /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
 
 VOLUME [ "/usr/local/apache2/conf/extra/sites-enabled" ]
 
