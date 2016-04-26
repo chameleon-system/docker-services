@@ -2,9 +2,6 @@ FROM debian:jessie
 MAINTAINER Maximilian Heinrich <maximilian.heinrich@esono.de>
 # Image based on dperson/samba / David Personette <dperson@dperson.com>
 
-# Creating www-data user with id 33
-RUN useradd -u 33 -g 33 www-data
-
 # Install samba
 RUN export DEBIAN_FRONTEND='noninteractive' && \
     apt-get update -qq && \
