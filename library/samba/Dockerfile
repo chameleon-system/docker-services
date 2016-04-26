@@ -2,6 +2,9 @@ FROM debian:jessie
 MAINTAINER Maximilian Heinrich <maximilian.heinrich@esono.de>
 # Image based on dperson/samba / David Personette <dperson@dperson.com>
 
+# Creating www-data user with id 33
+RUN useradd -u 33 -g 33 www-data
+
 # Install samba
 RUN export DEBIAN_FRONTEND='noninteractive' && \
     apt-get update -qq && \
@@ -17,8 +20,8 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     echo '   directory mask = 0775' >>/etc/samba/smb.conf && \
     echo '   force create mode = 0664' >>/etc/samba/smb.conf && \
     echo '   force directory mode = 0775' >>/etc/samba/smb.conf && \
-    echo '   force user = 33' >>/etc/samba/smb.conf && \
-    echo '   force group = 33' >>/etc/samba/smb.conf && \
+    echo '   force user = www-data' >>/etc/samba/smb.conf && \
+    echo '   force group = www-data' >>/etc/samba/smb.conf && \
     echo '   load printers = no' >>/etc/samba/smb.conf && \
     echo '   printing = bsd' >>/etc/samba/smb.conf && \
     echo '   printcap name = /dev/null' >>/etc/samba/smb.conf && \
