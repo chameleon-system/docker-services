@@ -33,6 +33,14 @@ heredocdocu
 
 if [ "true" == "$EPP_XDEBUG" ]; then
   echo "found EPP_XDEBUG=true: enabling xdebug" >> $outputchannel
+  echo "xdebug.remote_host = localhost \
+xdebug.remote_connect_back = 1 \
+xdebug.remote_port = 9000 \
+xdebug.remote_handler = dbgp \
+xdebug.remote_mode = req \
+xdebug.max_nesting_level=500 \
+xdebug.profiler_enable_trigger = 1 \
+" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 else
   echo "found EPP_XDEBUG=false or not set: disabling xdebug" >> $outputchannel
   rm -f /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
