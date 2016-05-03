@@ -31,6 +31,10 @@ cat << heredocdocu >> $outputchannel
 ENV available: EPP_XDEBUG=true|false (enables/disables xdebug module - default = false)
 heredocdocu
 
+# setting run user from environment
+
+sed -i "s/www-data/$SERVICE_USER_ID/g" /usr/local/etc/php-fpm.d/www.conf
+
 if [ "true" == "$EPP_XDEBUG" ]; then
   echo "found EPP_XDEBUG=true: enabling xdebug" >> $outputchannel
   echo "xdebug.remote_host = localhost \
