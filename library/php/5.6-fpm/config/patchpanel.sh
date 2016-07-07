@@ -29,6 +29,8 @@
 outputchannel="/proc/self/fd/2"
 cat << heredocdocu >> $outputchannel
 ENV available: EPP_XDEBUG=true|false (enables/disables xdebug module - default = false)
+ENV available: EPP_XDEBUG_REMOTE_HOST=ip-address (the ip-address or hostname (must be resolvable from inside docker!) where your debugging IDE can be reached)
+ENV available: SERVICE_USER_ID=user_id (the user id php-fpm should run as. for example:33 or 1000)
 heredocdocu
 
 # setting run user from environment
@@ -37,14 +39,16 @@ sed -i "s/www-data/$SERVICE_USER_ID/g" /usr/local/etc/php-fpm.d/www.conf
 
 if [ "true" == "$EPP_XDEBUG" ]; then
   echo "found EPP_XDEBUG=true: enabling xdebug" >> $outputchannel
-  echo "xdebug.remote_host = localhost \
-xdebug.remote_connect_back = 1 \
-xdebug.remote_port = 9000 \
-xdebug.remote_handler = dbgp \
-xdebug.remote_mode = req \
-xdebug.max_nesting_level=500 \
-xdebug.profiler_enable_trigger = 1 \
-" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+  echo -e "xdebug.remote_host = $EPP_XDEBUG_REMOTE_HOST \n
+xdebug.max_nesting_level = 1000 \n
+xdebug.remote_enable = 1 \n
+xdebug.remote_connect_back = 1 \n
+xdebug.remote_port = 9000 \n
+xdebug.remote_handler = dbgp \n
+xdebug.remote_mode = req \n
+xdebug.max_nesting_level=500 \n
+xdebug.profiler_enable_trigger = 1 \n
+" > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 else
   echo "found EPP_XDEBUG=false or not set: disabling xdebug" >> $outputchannel
   rm -f /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
