@@ -48,7 +48,7 @@ xdebug.remote_handler = dbgp \n
 xdebug.remote_mode = req \n
 xdebug.max_nesting_level=500 \n
 xdebug.profiler_enable_trigger = 1 \n
-" > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+" > /usr/local/etc/php/conf.d/docker-php-ext-xdebug-esono.ini
 else
   echo "found EPP_XDEBUG=false or not set: disabling xdebug" >> $outputchannel
   rm -f /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
