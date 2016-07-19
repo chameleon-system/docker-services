@@ -1,0 +1,18 @@
+http.cors.enabled: true
+path:
+  data: /data/data
+  logs: /data/log
+  plugins: /data/plugins
+  work: /data/work
+node.master: true
+node.data: true
+
+# in docker contexts with one elasticsearch on each physical node enter node ip here - otherwise comment out
+network.publish_host: localhost
+
+discovery.zen.ping.multicast.enabled: false
+
+# enter all es nodes here unless they are in the same network and capable of finding each other
+discovery.zen.ping.unicast.hosts: ["localhost"]
+
+script.disable_dynamic: false
