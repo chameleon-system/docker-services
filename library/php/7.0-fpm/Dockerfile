@@ -46,4 +46,6 @@ RUN chmod 755 /patchpanel.sh
 # workaround: symlinking /usr/bin/php as it's exepcted in that location by some scripts
 RUN ln -s /usr/local/bin/php /usr/bin/php
 
+WORKDIR /usr/local/apache2/htdocs/customer
+
 CMD [ "/patchpanel.sh" ]
