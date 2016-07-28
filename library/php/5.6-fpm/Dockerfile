@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN docker-php-ext-configure sybase_ct --with-sybase-ct=shared,/usr
 
-RUN docker-php-ext-install -j$(nproc) gd soap sybase_ct
+RUN docker-php-ext-install -j$(nproc) gd soap sybase_ct zip
 
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug \
