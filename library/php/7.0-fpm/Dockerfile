@@ -28,9 +28,7 @@ RUN apt-get update && apt-get install -y \
     && pecl install imagick \
     && docker-php-ext-enable imagick
     
-RUN docker-php-ext-configure sybase_ct --with-sybase-ct=shared,/usr
-
-RUN docker-php-ext-install -j$(nproc) gd soap sybase_ct zip
+RUN docker-php-ext-install -j$(nproc) gd soap zip
 
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug \
