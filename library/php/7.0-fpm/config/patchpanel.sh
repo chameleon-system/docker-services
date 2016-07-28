@@ -54,4 +54,6 @@ else
   rm -f /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 fi
 
+chown $SERVICE_USER_ID /.composer
+
 exec php-fpm
