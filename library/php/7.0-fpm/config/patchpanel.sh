@@ -30,6 +30,7 @@ outputchannel="/proc/self/fd/2"
 cat << heredocdocu >> $outputchannel
 ENV available: EPP_XDEBUG=true|false (enables/disables xdebug module - default = false)
 ENV available: EPP_XDEBUG_REMOTE_HOST=ip-address (the ip-address or hostname (must be resolvable from inside docker!) where your debugging IDE can be reached)
+ENV available: EPP_SHOW_ERRORS=true|false (enables/disables displaying of PHP error messages)
 ENV available: SERVICE_USER_ID=user_id (the user id php-fpm should run as. for example:33 or 1000)
 heredocdocu
 
@@ -53,6 +54,11 @@ else
   echo "found EPP_XDEBUG=false or not set: disabling xdebug" >> $outputchannel
   rm -f /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 fi
+
+if [ "true" == "$EPP_SHOW_ERRORS" ]; then
+  sed -i "s/display_errors = Off/display_errors = On/g" /usr/local/etc/php/php.ini
+fi
+
 
 chown $SERVICE_USER_ID /.composer
 
