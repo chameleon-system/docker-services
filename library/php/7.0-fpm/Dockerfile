@@ -48,6 +48,4 @@ RUN ln -s /usr/local/bin/php /usr/bin/php
 
 WORKDIR /usr/local/apache2/htdocs/customer
 
-VOLUME composercache:/.composer
-
 CMD [ "/patchpanel.sh" ]
