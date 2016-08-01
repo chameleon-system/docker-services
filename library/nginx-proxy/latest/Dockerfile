@@ -1,4 +1,4 @@
-FROM:jwilder/nginx-proxy:latest
+FROM jwilder/nginx-proxy:latest
 COPY config/certs /etc/nginx/certs
 RUN { \
       echo 'proxy_connect_timeout       600;'; \
