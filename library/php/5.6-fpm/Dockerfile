@@ -41,4 +41,5 @@ RUN ln -s /usr/local/bin/php /usr/bin/php
 
 WORKDIR /usr/local/apache2/htdocs/customer
 
-CMD [ "/patchpanel.sh" ]
+ENTRYPOINT [ "/patchpanel.sh" ]
+CMD [ "php-fpm" ]

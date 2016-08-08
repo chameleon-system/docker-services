@@ -62,6 +62,4 @@ if [ "true" == "$EPP_SHOW_ERRORS" ]; then
   sed -i "s/display_errors = Off/display_errors = On/g" /usr/local/etc/php/php.ini
 fi
 
-chown $SERVICE_USER_ID /.composer
-
-exec php-fpm
+exec "$@"
