@@ -35,6 +35,9 @@ ENV available: SERVICE_USER_ID=user_id (the user id php-fpm should run as. for e
 heredocdocu
 
 # setting run user from environment
+useradd -u $SERVICE_USER_ID $SERVICE_USER_NAME -d /usr/local/apache2/htdocs/ -s /bin/bash
+
+# setting run user from environment
 
 sed -i "s/www-data/$SERVICE_USER_ID/g" /usr/local/etc/php-fpm.d/www.conf
 
