@@ -28,7 +28,7 @@
 #
 
 # setting run user from environment
-useradd -u $SERVICE_USER_ID $SERVICE_USER_NAME -d /usr/local/apache2/htdocs/ -s /bin/bash
+useradd -u $SERVICE_USER_ID $SERVICE_USER_NAME -d /home/$SERVICE_USER_NAME -m -s /bin/bash
 
 # setting run user from environment
 
@@ -52,5 +52,9 @@ fi
 if [ "true" == "$EPP_SHOW_ERRORS" ]; then
   sed -i "s/display_errors = Off/display_errors = On/g" /usr/local/etc/php/php.ini
 fi
+
+su - $SERVICE_USER_NAME
+
+cd $EPP_WORKINGDIR
 
 exec "$@"
