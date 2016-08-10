@@ -28,7 +28,7 @@
 #
 
 # setting run user from environment
-useradd -u $SERVICE_USER_ID $SERVICE_USER_NAME -d /home/$SERVICE_USER_NAME -s /bin/bash
+id -u $SERVICE_USER_NAME &>/dev/null | useradd -u $SERVICE_USER_ID $SERVICE_USER_NAME -d /home/$SERVICE_USER_NAME -s /bin/bash
 
 # setting run user from environment
 
@@ -53,4 +53,8 @@ if [ "true" == "$EPP_SHOW_ERRORS" ]; then
   sed -i "s/display_errors = Off/display_errors = On/g" /usr/local/etc/php/php.ini
 fi
 
-exec gosu $SERVICE_USER_ID:$SERVICE_USER_ID "$@"
+if [ "$1" = 'php-fpm' ]; then
+    exec "$@"
+else
+    exec gosu $SERVICE_USER_ID:$SERVICE_USER_ID "$@"
+fi
