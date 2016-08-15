@@ -4,6 +4,7 @@ FROM php:5.6-fpm
 RUN apt-get update && apt-get install -y \
     aspell \
     aspell-de \
+    git \
     libicu-dev \
     libmcrypt-dev \
     libmemcached-dev \
