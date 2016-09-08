@@ -24,11 +24,11 @@ RUN git clone -b php7 --single-branch https://github.com/php-memcached-dev/php-m
 # Adding layer for imagemagick. This adds A LOT of extra payload to this docker.
 # Remove it if you don't need it
 RUN apt-get update && apt-get install -y \
-    imagemagick libmagickwand-dev libmagickcore-dev jpegoptim optipng \
+    imagemagick libmagickwand-dev libmagickcore-dev jpegoptim optipng libcurl3-dev libicu-dev \
     && pecl install imagick \
     && docker-php-ext-enable imagick
     
-RUN docker-php-ext-install -j$(nproc) gd soap zip opcache bcmath sockets intl
+RUN docker-php-ext-install -j$(nproc) gd soap zip opcache bcmath sockets curl intl
 
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug \
