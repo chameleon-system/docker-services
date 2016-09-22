@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
     zlib1g-dev \
     && pecl install memcached \
     && docker-php-ext-enable memcached \
-    && docker-php-ext-install -j$(nproc) iconv mcrypt mbstring pdo_mysql intl mysql
+    && docker-php-ext-install -j$(nproc) iconv mcrypt mbstring pdo_mysql intl mysql mysqli
 
 # Adding layer for imagemagick. This adds A LOT of extra payload to this docker.
 # Remove it if you don't need it
