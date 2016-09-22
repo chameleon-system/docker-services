@@ -28,7 +28,7 @@ RUN apt-get update && apt-get install -y \
     && pecl install imagick \
     && docker-php-ext-enable imagick
     
-RUN docker-php-ext-install -j$(nproc) gd soap zip opcache bcmath sockets curl intl
+RUN docker-php-ext-install -j$(nproc) gd soap zip opcache bcmath sockets curl intl mysqli
 
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug \
