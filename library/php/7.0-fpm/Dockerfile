@@ -27,7 +27,7 @@ RUN apt-get update && apt-get install -y \
     imagemagick libmagickwand-dev libmagickcore-dev jpegoptim optipng libcurl3-dev libicu-dev \
     && pecl install imagick \
     && docker-php-ext-enable imagick
-    
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/    
 RUN docker-php-ext-install -j$(nproc) gd soap zip opcache bcmath sockets curl intl mysqli
 
 RUN pecl install xdebug \
