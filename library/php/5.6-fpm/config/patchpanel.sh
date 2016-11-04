@@ -49,6 +49,12 @@ else
   rm -f /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 fi
 
+if [ "true" == "$EPP_BLACKFIRE" ]; then
+  mv /tmp/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so
+  printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > /usr/local/etc/php/conf.d/blackfire.ini
+fi
+
+
 if [ "true" == "$EPP_SHOW_ERRORS" ]; then
   sed -i "s/display_errors = Off/display_errors = On/g" /usr/local/etc/php/php.ini
 fi
