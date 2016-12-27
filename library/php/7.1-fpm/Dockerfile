@@ -1,4 +1,4 @@
-FROM php:7.0-fpm
+FROM php:7.1-fpm
 
 # Adding some basic stuff to make chameleon run
 RUN apt-get update && apt-get install -y \
