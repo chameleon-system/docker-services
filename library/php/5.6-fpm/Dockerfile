@@ -18,11 +18,12 @@ RUN apt-get update && apt-get install -y \
 RUN apt-get update && apt-get install -y \
    imagemagick libmagickwand-dev libmagickcore-dev jpegoptim optipng freetds-dev libcurl3-dev libicu-dev \
    && pecl install imagick \
-   && docker-php-ext-enable imagick
+   && docker-php-ext-enable imagick \
+   && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.a /usr/lib/
 
 RUN docker-php-ext-configure sybase_ct --with-sybase-ct=shared,/usr
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
-RUN docker-php-ext-install -j$(nproc) gd soap sybase_ct zip opcache bcmath sockets curl intl
+RUN docker-php-ext-install -j$(nproc) gd soap sybase_ct zip opcache bcmath sockets curl intl pdo_dblib
 
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug \
