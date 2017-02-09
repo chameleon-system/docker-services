@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
     libmcrypt-dev \
     libmemcached-dev \
     zlib1g-dev \
-    && pecl install memcached \
+    && pecl install memcached-2.2.0 \
     && docker-php-ext-enable memcached \
     && docker-php-ext-install -j$(nproc) iconv mcrypt mbstring pdo_mysql intl mysql mysqli
 
