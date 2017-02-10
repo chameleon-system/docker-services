@@ -59,6 +59,9 @@ if [ "true" == "$EPP_SHOW_ERRORS" ]; then
   sed -i "s/display_errors = Off/display_errors = On/g" /usr/local/etc/php/php.ini
 fi
 
+# retrieve rancher specific environment information and populate them into ENV variables for logspout
+LOGSTASH_FIELDS="stack=$(wget -qO - 'http://rancher-metadata.rancher.internal/2015-12-19/self/stack/name'),environment=$(wget -qO - 'http://rancher-metadata.rancher.internal/2015-12-19/self/stack/environment_name')"
+
 if [ "$1" = 'php-fpm' ]; then
     exec "$@"
 else
