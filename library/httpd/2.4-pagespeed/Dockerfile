@@ -11,6 +11,7 @@ RUN wget https://dl-ssl.google.com/dl/linux/direct/mod-pagespeed-stable_current_
 RUN dpkg -i mod-pagespeed-*.deb
 RUN rm -f mod-pagespeed-*.deb
 RUN cp /usr/lib/apache2/modules/mod_pagespeed_ap24.so /usr/local/apache2/modules/
+RUN mkdir -p /var/cache/mod_pagespeed/ && mkdir -p /var/log/pagespeed
 
 EXPOSE 80
 
