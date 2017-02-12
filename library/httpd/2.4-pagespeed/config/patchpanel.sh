@@ -33,4 +33,6 @@ useradd -u $SERVICE_USER_ID $SERVICE_USER_NAME -d /usr/local/apache2/htdocs/ -s 
 
 sed -i "s/daemon/$SERVICE_USER_NAME/g" /usr/local/apache2/conf/httpd.conf
 
+chown $SERVICE_USER_ID /var/cache/mod_pagespeed && chown $SERVICE_USER_ID /var/log/pagespeed
+
 exec httpd-foreground
