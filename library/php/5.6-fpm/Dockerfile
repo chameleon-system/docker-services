@@ -26,11 +26,7 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-di
 RUN docker-php-ext-install -j$(nproc) gd soap sybase_ct zip opcache bcmath sockets curl intl pdo_dblib
 
 RUN pecl install xdebug \
-    && docker-php-ext-enable xdebug \
-    && echo "xdebug.max_nesting_level = 1000" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.remote_enable = 1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.remote_connect_back = 1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.remote_port = 9000" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    && docker-php-ext-enable xdebug
 
 ENV GOSU_VERSION 1.9
 RUN set -x \
