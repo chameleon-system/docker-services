@@ -1,0 +1,11 @@
+http.cors.enabled: true
+path:
+  data: /data/data
+  logs: /data/log
+  plugins: /data/plugins
+  work: /data/work
+node.master: true
+node.data: true
+
+discovery.zen.ping.multicast.enabled: true
+script.disable_dynamic: false
