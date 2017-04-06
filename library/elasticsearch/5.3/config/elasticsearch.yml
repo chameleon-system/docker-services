@@ -1,3 +1,4 @@
+http.host: 0.0.0.0
 http.cors.enabled: true
 path:
   data: /data/data
