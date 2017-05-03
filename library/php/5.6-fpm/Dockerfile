@@ -25,7 +25,7 @@ RUN docker-php-ext-configure sybase_ct --with-sybase-ct=shared,/usr
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
 RUN docker-php-ext-install -j$(nproc) gd soap sybase_ct zip opcache bcmath sockets curl intl pdo_dblib
 
-RUN pecl install xdebug \
+RUN pecl install xdebug-2.5.1 \
     && docker-php-ext-enable xdebug
 
 ENV GOSU_VERSION 1.9
