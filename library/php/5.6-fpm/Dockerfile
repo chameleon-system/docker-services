@@ -8,10 +8,11 @@ RUN apt-get update && apt-get install -y \
     libicu-dev \
     libmcrypt-dev \
     libmemcached-dev \
+    libtidy-dev \
     zlib1g-dev \
     && pecl install memcached-2.2.0 \
     && docker-php-ext-enable memcached \
-    && docker-php-ext-install -j$(nproc) iconv mcrypt mbstring pdo_mysql intl mysql mysqli
+    && docker-php-ext-install -j$(nproc) iconv mcrypt mbstring pdo_mysql intl mysql mysqli tidy
 
 # Adding layer for imagemagick. This adds A LOT of extra payload to this docker.
 # Remove it if you don't need it
