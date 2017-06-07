@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y \
     aspell-de \
     freetds-dev \
     libmemcached-dev \
+    libtidy-dev \
     zlib1g-dev \
     git
 
@@ -20,7 +21,7 @@ RUN git clone -b php7 --single-branch https://github.com/php-memcached-dev/php-m
     && rm -rf php-memcached \
     && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.a /usr/lib/ \
     && docker-php-ext-enable memcached \
-    && docker-php-ext-install -j$(nproc) opcache iconv mbstring pdo_mysql pdo_dblib
+    && docker-php-ext-install -j$(nproc) opcache iconv mbstring pdo_mysql pdo_dblib tidy
 
 # Adding layer for imagemagick. This adds A LOT of extra payload to this docker.
 # Remove it if you don't need it
