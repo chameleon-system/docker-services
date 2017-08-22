@@ -16,4 +16,10 @@
 * SERVICE_USER_ID=user_id (the user id php-fpm should run as. for example:33 or 1000)
 * SERVICE_USER_NAME=user_name (the user name for the given id php-fpm should use)
 
+## APACHE
 
+### Available Environment Variables
+
+* HTACCESS_USER=Username for htaccess
+* HTACCESS_PASS=Password for htaccess
+* HTACCESS_WHITELIST_IP_REGEX=The IP-address or a regex matching an IP-address range to whitelist against htaccess control

@@ -33,4 +33,26 @@ useradd -u $SERVICE_USER_ID $SERVICE_USER_NAME -d /usr/local/apache2/htdocs/ -s 
 
 sed -i "s/daemon/$SERVICE_USER_NAME/g" /usr/local/apache2/conf/httpd.conf
 
+if [ ! -z "$HTACCESS_USER" ] && [ ! -z "$HTACCESS_PASS" ]; then
+  echo "htpasswd -c /usr/local/apache2/conf/htuser $HTACCESS_USER $HTACCESS_PASS"
+  htpasswd -b -c /usr/local/apache2/conf/htuser $HTACCESS_USER $HTACCESS_PASS
+  sed -i 's/<\/VirtualHost>//g' /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
+  echo "<Location />
+    Order deny,allow
+    Deny from all
+    AuthName \"protected\"
+    AuthUserFile /usr/local/apache2/conf/htuser
+    AuthType Basic
+    Require valid-user" >> /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
+
+  if [ ! -z "$HTACCESS_WHITELIST_CIDR" ]; then
+    echo "SetEnvIf X-FORWARDED-FOR \"$HTACCESS_WHITELIST_IP_REGEX\" AllowIP" >> /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
+  fi
+
+  echo "Allow from env=AllowIP
+    Satisfy Any
+  </Location>
+  </VirtualHost>" >> /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
+fi
+
 exec httpd-foreground
