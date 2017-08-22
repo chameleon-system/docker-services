@@ -45,7 +45,7 @@ if [ ! -z "$HTACCESS_USER" ] && [ ! -z "$HTACCESS_PASS" ]; then
     AuthType Basic
     Require valid-user" >> /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
 
-  if [ ! -z "$HTACCESS_WHITELIST_CIDR" ]; then
+  if [ ! -z "$HTACCESS_WHITELIST_IP_REGEX" ]; then
     echo "SetEnvIf X-FORWARDED-FOR \"$HTACCESS_WHITELIST_IP_REGEX\" AllowIP" >> /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
   fi
 
