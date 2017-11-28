@@ -28,37 +28,46 @@
 #
 outputchannel="/proc/self/fd/2"
 
-# setting run user from environment
-useradd -u $SERVICE_USER_ID $SERVICE_USER_NAME -d /usr/local/apache2/htdocs/ -s /bin/bash
+# only run configuration once
+if [ ! -f /usr/local/apache2/conf/patchpanel.lock ]; then
 
-sed -i "s/daemon/$SERVICE_USER_NAME/g" /usr/local/apache2/conf/httpd.conf
+	# setting run user from environment
+	useradd -u $SERVICE_USER_ID $SERVICE_USER_NAME -d /usr/local/apache2/htdocs/ -s /bin/bash
+	sed -i "s/daemon/$SERVICE_USER_NAME/g" /usr/local/apache2/conf/httpd.conf
 
-if [ ! -z "$HTACCESS_USER" ] && [ ! -z "$HTACCESS_PASS" ]; then
-  echo "htpasswd -c /usr/local/apache2/conf/htuser $HTACCESS_USER $HTACCESS_PASS"
-  htpasswd -b -c /usr/local/apache2/conf/htuser $HTACCESS_USER $HTACCESS_PASS
-  sed -i 's/<\/VirtualHost>//g' /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
-  echo "<Location />
-    Order deny,allow
-    Deny from all
-    AuthName \"protected\"
-    AuthUserFile /usr/local/apache2/conf/htuser
-    AuthType Basic
-    Require valid-user" >> /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
+	# include htaccess protection if set
+	if [ ! -z "$HTACCESS_USER" ] && [ ! -z "$HTACCESS_PASS" ]; then
+	  echo "htpasswd -c /usr/local/apache2/conf/htuser $HTACCESS_USER $HTACCESS_PASS"
+	  htpasswd -b -c /usr/local/apache2/conf/htuser $HTACCESS_USER $HTACCESS_PASS
+	  sed -i 's/<\/VirtualHost>//g' /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
+	  echo "<Location />
+	    Order deny,allow
+	    Deny from all
+	    AuthName \"protected\"
+	    AuthUserFile /usr/local/apache2/conf/htuser
+	    AuthType Basic
+	    Require valid-user" >> /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
 
-  if [ ! -z "$HTACCESS_WHITELIST_IP_REGEX" ]; then
-    echo "SetEnvIf X-FORWARDED-FOR \"$HTACCESS_WHITELIST_IP_REGEX\" AllowIP" >> /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
-  fi
+	  # Whitelist all IPs matching a REGEX if given
+	  if [ ! -z "$HTACCESS_WHITELIST_IP_REGEX" ]; then
+	    echo "SetEnvIf X-FORWARDED-FOR \"$HTACCESS_WHITELIST_IP_REGEX\" AllowIP" >> /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
+	  fi
 
-  echo "Allow from env=AllowIP
-    Satisfy Any
-  </Location>
-  </VirtualHost>" >> /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
-fi
+	  echo "Allow from env=AllowIP
+	    Satisfy Any
+	  </Location>
+	  </VirtualHost>" >> /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
+	fi
 
-if [ ! -z "$VHOST_CUSTOM_CONFIG" ]; then
-  sed -i 's/<\/VirtualHost>//g' /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
-  echo " Include $VHOST_CUSTOM_CONFIG
+	# include custom configuration if set
+	if [ ! -z "$VHOST_CUSTOM_CONFIG" ]; then
+	  sed -i 's/<\/VirtualHost>//g' /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
+	  echo " Include $VHOST_CUSTOM_CONFIG
 </VirtualHost>" >> /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
+	fi
+
+	# write lockfile to prevent multiple execution
+	touch /usr/local/apache2/conf/patchpanel.lock
 fi
 
 exec httpd-foreground
