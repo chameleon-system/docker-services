@@ -55,4 +55,10 @@ if [ ! -z "$HTACCESS_USER" ] && [ ! -z "$HTACCESS_PASS" ]; then
   </VirtualHost>" >> /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
 fi
 
+if [ ! -z "$VHOST_CUSTOM_CONFIG" ]; then
+  sed -i 's/<\/VirtualHost>//g' /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
+  echo "Include $VHOST_CUSTOM_CONFIG
+        </VirtualHost>" >> /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
+fi
+
 exec httpd-foreground
