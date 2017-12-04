@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y \
 # Adding layer for imagemagick. This adds A LOT of extra payload to this docker.
 # Remove it if you don't need it
 RUN apt-get update && apt-get install -y \
-   imagemagick libmagickwand-dev libmagickcore-dev jpegoptim optipng freetds-dev libcurl3-dev libicu-dev \
+   imagemagick libmagickwand-dev libmagickcore-dev jpegoptim optipng pngquant freetds-dev libcurl3-dev libicu-dev \
    && pecl install imagick \
    && docker-php-ext-enable imagick \
    && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.a /usr/lib/
