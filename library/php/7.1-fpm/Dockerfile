@@ -33,9 +33,7 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-di
 RUN docker-php-ext-install -j$(nproc) gd soap zip opcache bcmath sockets curl intl mysqli
 
 RUN pecl install xdebug \
-    && docker-php-ext-enable xdebug \
-    && pecl install redis \
-    && docker-php-ext-enable redis
+    && docker-php-ext-enable xdebug
 
 ENV GOSU_VERSION 1.9
 RUN set -x \
