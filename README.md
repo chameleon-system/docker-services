@@ -15,7 +15,7 @@
 * EPP_SHOW_ERRORS=true|false (enables/disables displaying of PHP error messages)
 * SERVICE_USER_ID=user_id (the user id php-fpm should run as. for example:33 or 1000)
 * SERVICE_USER_NAME=user_name (the user name for the given id php-fpm should use)
-
+* SSH_CONFIG=Path to an ssh config on the host which you may optionally provide.
 ## APACHE
 
 ### Available Environment Variables
