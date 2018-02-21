@@ -52,6 +52,7 @@ COPY config/php.ini /usr/local/etc/php/
 COPY config/proxy.conf /usr/local/etc/php-fpm.d/
 
 COPY config/patchpanel.sh /
+COPY tools /usr/local/bin/tools
 
 RUN chmod 755 /patchpanel.sh
 

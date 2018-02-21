@@ -59,6 +59,8 @@ if [ "true" == "$EPP_SHOW_ERRORS" ]; then
   sed -i "s/display_errors = Off/display_errors = On/g" /usr/local/etc/php/php.ini
 fi
 
+. /usr/local/bin/tools/create-ssh-config.sh
+
 if [ "$1" = 'php-fpm' ]; then
     exec "$@"
 else
