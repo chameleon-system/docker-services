@@ -35,6 +35,11 @@ if [ ! -f /usr/local/apache2/conf/patchpanel.lock ]; then
 	useradd -u $SERVICE_USER_ID $SERVICE_USER_NAME -d /usr/local/apache2/htdocs/ -s /bin/bash
 	sed -i "s/daemon/$SERVICE_USER_NAME/g" /usr/local/apache2/conf/httpd.conf
 
+    # set custom document root if configured (sed used with commas to avoid collisions with slashes in $PUBLIC_DIR)
+    if [ ! -z "$PUBLIC_DIR" ]; then
+        sed -i "s,htdocs/customer/web,htdocs/$PUBLIC_DIR,g" /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
+    fi
+
 	# include htaccess protection if set
 	if [ ! -z "$HTACCESS_USER" ] && [ ! -z "$HTACCESS_PASS" ]; then
 	  echo "htpasswd -c /usr/local/apache2/conf/htuser $HTACCESS_USER $HTACCESS_PASS"
