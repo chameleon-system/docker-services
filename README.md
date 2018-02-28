@@ -20,6 +20,7 @@
 
 ### Available Environment Variables
 
+* PUBLIC_DIR=The document root dir relative to htdocs, defaults to "customer/web"
 * HTACCESS_USER=Username for htaccess
 * HTACCESS_PASS=Password for htaccess
 * HTACCESS_WHITELIST_IP_REGEX=The IP-address or a regex matching an IP-address range to whitelist against htaccess control
