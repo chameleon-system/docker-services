@@ -28,51 +28,61 @@
 #
 outputchannel="/proc/self/fd/2"
 
+VHOST="/etc/apache2/sites-available/vhost.conf"
+LOCKFILE="/etc/patchpanel.lock"
+
 # only run configuration once
-if [ ! -f /usr/local/apache2/conf/patchpanel.lock ]; then
+if [ ! -f ${LOCKFILE} ]; then
 
 	# setting run user from environment
 	useradd -u $SERVICE_USER_ID $SERVICE_USER_NAME -d /usr/local/apache2/htdocs/ -s /bin/bash
-	sed -i "s/daemon/$SERVICE_USER_NAME/g" /usr/local/apache2/conf/httpd.conf
+	sed -i "s/APACHE_RUN_USER=www-data/APACHE_RUN_USER=$SERVICE_USER_NAME/g" /etc/apache2/envvars
 
     # set custom document root if configured (sed used with commas to avoid collisions with slashes in $PUBLIC_DIR)
     if [ ! -z "$PUBLIC_DIR" ]; then
-        sed -i "s,htdocs/customer/web,htdocs/$PUBLIC_DIR,g" /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
+        sed -i "s,htdocs/customer/web,htdocs/$PUBLIC_DIR,g" ${VHOST}
     fi
 
 	# include htaccess protection if set
 	if [ ! -z "$HTACCESS_USER" ] && [ ! -z "$HTACCESS_PASS" ]; then
 	  echo "htpasswd -c /usr/local/apache2/conf/htuser $HTACCESS_USER $HTACCESS_PASS"
 	  htpasswd -b -c /usr/local/apache2/conf/htuser $HTACCESS_USER $HTACCESS_PASS
-	  sed -i 's/<\/VirtualHost>//g' /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
+	  sed -i 's/<\/VirtualHost>//g' ${VHOST}
 	  echo "<Location />
 	    Order deny,allow
 	    Deny from all
 	    AuthName \"protected\"
 	    AuthUserFile /usr/local/apache2/conf/htuser
 	    AuthType Basic
-	    Require valid-user" >> /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
+	    Require valid-user" >> ${VHOST}
 
 	  # Whitelist all IPs matching a REGEX if given
 	  if [ ! -z "$HTACCESS_WHITELIST_IP_REGEX" ]; then
-	    echo "SetEnvIf X-FORWARDED-FOR \"$HTACCESS_WHITELIST_IP_REGEX\" AllowIP" >> /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
+	    echo "SetEnvIf X-FORWARDED-FOR \"$HTACCESS_WHITELIST_IP_REGEX\" AllowIP" >> ${VHOST}
 	  fi
 
 	  echo "Allow from env=AllowIP
 	    Satisfy Any
 	  </Location>
-	  </VirtualHost>" >> /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
+	  </VirtualHost>" >> ${VHOST}
 	fi
 
 	# include custom configuration if set
 	if [ ! -z "$VHOST_CUSTOM_CONFIG" ]; then
-	  sed -i 's/<\/VirtualHost>//g' /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
+	  sed -i 's/<\/VirtualHost>//g' ${VHOST}
 	  echo " Include $VHOST_CUSTOM_CONFIG
-</VirtualHost>" >> /usr/local/apache2/conf/extra/sites-enabled/vhost.conf
+</VirtualHost>" >> ${VHOST}
 	fi
 
 	# write lockfile to prevent multiple execution
-	touch /usr/local/apache2/conf/patchpanel.lock
+	touch ${LOCKFILE}
 fi
 
-exec httpd-foreground
+chown -R ${SERVICE_USER_ID} /var/cache/mod_pagespeed
+chown -R ${SERVICE_USER_ID} /var/log/pagespeed
+
+rm -f /var/run/apache2/apache2.pid
+
+. /etc/apache2/envvars
+
+exec apache2 -DFOREGROUND
