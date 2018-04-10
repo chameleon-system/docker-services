@@ -2,7 +2,11 @@ FROM ubuntu:16.04
 
 RUN mkdir -p /usr/local/apache2/htdocs/customer/web /usr/local/apache2/conf
 
-RUN apt-get update && apt-get install -y apache2 curl
+RUN apt-get update \
+    && apt-get install -y \
+       apache2 \
+       curl \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir /opt/pagespeed \
     && cd /opt/pagespeed \
