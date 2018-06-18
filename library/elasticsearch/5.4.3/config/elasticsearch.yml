@@ -1,0 +1,11 @@
+http.host: 0.0.0.0
+http.cors.enabled: true
+node.master: true
+node.data: true
+
+# in docker contexts with one elasticsearch on each physical node enter node ip here - otherwise comment out
+network.publish_host: localhost
+
+# enter all es nodes here unless they are in the same network and capable of finding each other
+discovery.zen.ping.unicast.hosts: ["localhost"]
+
