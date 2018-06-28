@@ -1,4 +1,4 @@
-FROM php:5.6-fpm
+FROM php:5.6-fpm-jessie
 
 # Adding some basic stuff to make chameleon run
 RUN apt-get update && apt-get install -y \
