@@ -7,8 +7,11 @@ RUN apt-get update && apt-get install -y \
     freetds-dev \
     libmemcached-dev \
     libtidy-dev \
+    locales \
     zlib1g-dev \
-    git
+    git \
+    && locale-gen de_DE.UTF-8 \
+    && locale-gen en_EN.UTF-8
 
 RUN git clone -b php7 --single-branch https://github.com/php-memcached-dev/php-memcached.git \
     && ( \
