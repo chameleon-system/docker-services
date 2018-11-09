@@ -19,7 +19,12 @@ RUN mkdir /opt/pagespeed \
 COPY config/sites-enabled/vhost.conf /etc/apache2/sites-available/vhost.conf
 COPY config/patchpanel.sh /usr/local/bin/
 COPY config/apache2.conf /etc/apache2/apache2.conf
-COPY config/security.conf /etc/apache2/conf-enabled/security.conf
+
+RUN mv /etc/modsecurity/modsecurity.conf-recommended /etc/modsecurity/modsecurity.conf
+RUN cd /etc/modsecurity && git clone https://github.com/SpiderLabs/owasp-modsecurity-crs.git
+RUN mv /etc/modsecurity/owasp-modsecurity-crs/crs-setup.conf.example /etc/modsecurity/owasp-modsecurity-crs/crs-setup.conf
+RUN echo "Include /etc/modsecurity/owasp-modsecurity-crs/*.conf" >> /etc/modsecurity/modsecurity.conf
+RUN echo "Include /etc/modsecurity/owasp-modsecurity-crs/rules/*.conf" >> /etc/modsecurity/modsecurity.conf
 
 RUN sed -i 's/ModPagespeed on/ModPagespeed off/g' /etc/apache2/mods-enabled/pagespeed.conf
 
