@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 RUN mkdir -p /usr/local/apache2/htdocs/customer/web /usr/local/apache2/conf
 
@@ -7,6 +7,7 @@ RUN apt-get update \
        apache2 \
        libapache2-mod-security2 \
        curl \
+       git \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir /opt/pagespeed \
