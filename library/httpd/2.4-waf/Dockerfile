@@ -7,7 +7,6 @@ RUN apt-get update \
        apache2 \
        libapache2-mod-security2 \
        curl \
-       git \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir /opt/pagespeed \
@@ -22,10 +21,6 @@ COPY config/patchpanel.sh /usr/local/bin/
 COPY config/apache2.conf /etc/apache2/apache2.conf
 
 RUN mv /etc/modsecurity/modsecurity.conf-recommended /etc/modsecurity/modsecurity.conf
-RUN cd /etc/modsecurity && git clone https://github.com/SpiderLabs/owasp-modsecurity-crs.git
-RUN mv /etc/modsecurity/owasp-modsecurity-crs/crs-setup.conf.example /etc/modsecurity/owasp-modsecurity-crs/crs-setup.conf
-RUN echo "Include /etc/modsecurity/owasp-modsecurity-crs/*.conf" >> /etc/modsecurity/modsecurity.conf
-RUN echo "Include /etc/modsecurity/owasp-modsecurity-crs/rules/*.conf" >> /etc/modsecurity/modsecurity.conf
 
 RUN sed -i 's/ModPagespeed on/ModPagespeed off/g' /etc/apache2/mods-enabled/pagespeed.conf
 
