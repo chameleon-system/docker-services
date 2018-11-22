@@ -27,7 +27,7 @@ RUN sed -i 's/ModPagespeed on/ModPagespeed off/g' /etc/apache2/mods-enabled/page
 RUN a2ensite vhost.conf \
     && a2dissite 000-default.conf
 
-RUN a2enmod rewrite proxy_fcgi headers expires
+RUN a2enmod rewrite proxy_fcgi headers expires remoteip
 
 WORKDIR /usr/local/apache2/htdocs
 
