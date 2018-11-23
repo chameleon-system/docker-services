@@ -21,6 +21,7 @@ COPY config/patchpanel.sh /usr/local/bin/
 COPY config/apache2.conf /etc/apache2/apache2.conf
 
 RUN mv /etc/modsecurity/modsecurity.conf-recommended /etc/modsecurity/modsecurity.conf
+COPY config/zz-esono-001.conf /etc/modsecurity/zz-esono-001.conf
 
 RUN sed -i 's/ModPagespeed on/ModPagespeed off/g' /etc/apache2/mods-enabled/pagespeed.conf
 
@@ -28,6 +29,7 @@ RUN a2ensite vhost.conf \
     && a2dissite 000-default.conf
 
 RUN a2enmod rewrite proxy_fcgi headers expires remoteip
+
 
 WORKDIR /usr/local/apache2/htdocs
 

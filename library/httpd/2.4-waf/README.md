@@ -14,6 +14,7 @@
 ### Required ENV variables:
 * SERVICE_USER_ID - the id of the user it should run as
 * SERVICE_USER_NAME - the name of the user it should run as
+* SEC_RULE_ENGINE - On | DetectionOnly - Switches rule based blocking on or to detection only
 
 ### Optional ENV variables:
 * VHOST_CUSTOM_CONFIG - absolute path (inside the docker) of a config file mounted from the host - see example below
