@@ -85,4 +85,9 @@ rm -f /var/run/apache2/apache2.pid
 
 . /etc/apache2/envvars
 
+if [ -z "$SEC_RULE_ENGINE" ]; then
+    export SEC_RULE_ENGINE="DetectionOnly"
+fi
+
+
 exec apache2 -DFOREGROUND
