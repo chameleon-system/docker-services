@@ -46,6 +46,11 @@ if [ ! -f ${LOCKFILE} ]; then
     # set custom php backend if configured (sed used with commas to avoid collisions with slashes)
     if [ ! -z "$PHP_BACKEND_HOSTNAME" ]; then
         sed -i "s,proxy:fcgi://php:9000,proxy:fcgi://$PHP_BACKEND_HOSTNAME:9000,g" ${VHOST}
+    else
+       # when no custom backend hostname is set for php but we're running in a kubernetes environment - default to localhost assuming we're in the same pod as php
+       if [ -d "/var/run/secrets/kubernetes.io" ]; then
+         sed -i "s,proxy:fcgi://php:9000,proxy:fcgi://localhost:9000,g" ${VHOST}
+       fi
     fi
 
 	# include htaccess protection if set
