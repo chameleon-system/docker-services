@@ -43,6 +43,11 @@ if [ ! -f ${LOCKFILE} ]; then
         sed -i "s,htdocs/customer/web,htdocs/$PUBLIC_DIR,g" ${VHOST}
     fi
 
+    # set custom php backend if configured (sed used with commas to avoid collisions with slashes)
+    if [ ! -z "$PHP_BACKEND_HOSTNAME" ]; then
+        sed -i "s,proxy:fcgi://php:9000,proxy:fcgi://$PHP_BACKEND_HOSTNAME:9000,g" ${VHOST}
+    fi
+
 	# include htaccess protection if set
 	if [ ! -z "$HTACCESS_USER" ] && [ ! -z "$HTACCESS_PASS" ]; then
 	  echo "htpasswd -c /usr/local/apache2/conf/htuser $HTACCESS_USER $HTACCESS_PASS"

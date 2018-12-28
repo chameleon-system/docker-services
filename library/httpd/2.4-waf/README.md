@@ -17,6 +17,8 @@
 * SEC_RULE_ENGINE - On | DetectionOnly - Switches rule based blocking on or to detection only
 
 ### Optional ENV variables:
+* PHP_BACKEND_HOSTNAME - use this to define a custom backend hostname other than "php". Use "localhost" here in kubernetes if both apache and php live in the same pod
+* PUBLIC_DIR - use this to define a custom webroot other than "customer"
 * VHOST_CUSTOM_CONFIG - absolute path (inside the docker) of a config file mounted from the host - see example below
 * HTACCESS_USER - htaccess user (multiple users / userlist not supported). Access is granted to all if empty!
 * HTACCESS_PASS - htaccess pass
