@@ -71,7 +71,6 @@ COPY config/patchpanel.sh /
 COPY tools /usr/local/bin/tools
 
 RUN chmod 755 /patchpanel.sh
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # workaround: symlinking /usr/bin/php as it's expected in that location by some scripts
 RUN ln -s /usr/local/bin/php /usr/bin/php
