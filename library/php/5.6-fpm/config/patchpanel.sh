@@ -34,11 +34,17 @@ id -u $SERVICE_USER_NAME &>/dev/null | useradd -u $SERVICE_USER_ID $SERVICE_USER
 
 sed -i "s/www-data/$SERVICE_USER_ID/g" /usr/local/etc/php-fpm.d/www.conf
 
+if [[ -z "$EPP_XDEBUG_REMOTE_HOST" ]]; then
+  EPP_XDEBUG_CONNECT_BACK=1
+else
+  EPP_XDEBUG_CONNECT_BACK=0
+fi
+
 if [ "true" == "$EPP_XDEBUG" ]; then
   echo -e "xdebug.remote_host = $EPP_XDEBUG_REMOTE_HOST \n
 xdebug.max_nesting_level = 1000 \n
 xdebug.remote_enable = 1 \n
-xdebug.remote_connect_back = 1 \n
+xdebug.remote_connect_back = $EPP_XDEBUG_CONNECT_BACK \n
 xdebug.remote_port = 9000 \n
 xdebug.remote_handler = dbgp \n
 xdebug.remote_mode = req \n
