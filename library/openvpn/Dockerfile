@@ -1,2 +1,0 @@
-FROM: dperson/openvpn-client
-
