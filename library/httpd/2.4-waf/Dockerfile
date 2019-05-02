@@ -19,6 +19,7 @@ RUN mkdir /opt/pagespeed \
 COPY config/sites-enabled/vhost.conf /etc/apache2/sites-available/vhost.conf
 COPY config/patchpanel.sh /usr/local/bin/
 COPY config/apache2.conf /etc/apache2/apache2.conf
+COPY config/security.conf /etc/apache2/conf-enabled/security.conf
 
 RUN mv /etc/modsecurity/modsecurity.conf-recommended /etc/modsecurity/modsecurity.conf
 COPY config/zz-esono-001.conf /etc/modsecurity/zz-esono-001.conf
