@@ -58,21 +58,21 @@ if [ ! -f ${LOCKFILE} ]; then
 	  echo "htpasswd -c /usr/local/apache2/conf/htuser $HTACCESS_USER $HTACCESS_PASS"
 	  htpasswd -b -c /usr/local/apache2/conf/htuser $HTACCESS_USER $HTACCESS_PASS
 	  sed -i 's/<\/VirtualHost>//g' ${VHOST}
-	  echo "<Location />
-	    Order deny,allow
-	    Deny from all
-	    AuthName \"protected\"
-	    AuthUserFile /usr/local/apache2/conf/htuser
-	    AuthType Basic
-	    Require valid-user" >> ${VHOST}
+	  echo "<Location />" >> ${VHOST}
 
 	  # Whitelist all IPs matching a REGEX if given
 	  if [ ! -z "$HTACCESS_WHITELIST_IP_REGEX" ]; then
 	    echo "SetEnvIf X-FORWARDED-FOR \"$HTACCESS_WHITELIST_IP_REGEX\" AllowIP" >> ${VHOST}
 	  fi
 
-	  echo "Allow from env=AllowIP
-	    Satisfy Any
+	    echo "<RequireAny>
+	    AuthName \"protected\"
+	    AuthUserFile /usr/local/apache2/conf/htuser
+	    AuthType Basic
+	    Require valid-user" >> ${VHOST}
+
+	  echo "Require env AllowIP
+	  </RequireAny>
 	  </Location>
 	  </VirtualHost>" >> ${VHOST}
 	fi
