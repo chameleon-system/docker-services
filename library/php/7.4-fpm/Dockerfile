@@ -1,8 +1,8 @@
 FROM php:7.4-fpm
 
 ARG XDEBUG_VERSION=xdebug-2.8.0
-ARG GD_FREETYPE_DIRECTIVE="--with-freetype-dir=/usr/include/"
-ARG GD_JPEG_DIRECTIVE="--with-jpeg-dir=/usr/include/"
+ARG GD_FREETYPE_DIRECTIVE="--with-freetype=/usr/include/"
+ARG GD_JPEG_DIRECTIVE="--with-jpeg=/usr/include/"
 ARG MEMCACHED_VERSION=memcached
 ARG PHP_ADDITIONAL_EXTENSIONS=""
 RUN apt-get update && apt-get install -y gnupg \
