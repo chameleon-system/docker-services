@@ -1,77 +1,54 @@
 FROM php:7.4-fpm
 
-ARG XDEBUG_VERSION=xdebug-2.8.0
-ARG GD_FREETYPE_DIRECTIVE="--with-freetype=/usr/include/"
-ARG GD_JPEG_DIRECTIVE="--with-jpeg=/usr/include/"
-ARG MEMCACHED_VERSION=memcached
-ARG PHP_ADDITIONAL_EXTENSIONS=""
-RUN apt-get update && apt-get install -y gnupg \
-    && curl -sSL https://packages.blackfire.io/gpg.key | apt-key add - \
-    && echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list \
-    && apt-get update \
-    && apt-get install -y blackfire-php
+ARG GD_FREETYPE_DIRECTIVE="--with-freetype-dir=/usr/include/"
+ARG GD_JPEG_DIRECTIVE="--with-jpeg-dir=/usr/include/"
 
-# install common dependencies
 # Adding some basic stuff to make chameleon run
 RUN apt-get update && apt-get install -y \
     aspell \
     aspell-de \
     freetds-dev \
-    jpegoptim \
-    libcurl3-dev \
-    libfreetype6-dev\
-    libicu-dev \
-    libjpeg-dev \
-    libpng-dev \
     libmemcached-dev \
-    libonig-dev \
     libtidy-dev \
     libzip-dev \
-    libxml2-dev \
     locales \
-    optipng \
-    pngquant \
     unzip \
     zlib1g-dev \
+    libonig-dev \
+    git \
     && locale-gen de_DE.UTF-8 \
     && locale-gen en_EN.UTF-8
+
+RUN git clone -b master --single-branch https://github.com/php-memcached-dev/php-memcached.git \
+    && ( \
+        cd php-memcached \
+        && phpize \
+        && ./configure \
+        && make -j$(nproc) \
+        && make install \
+       ) \
+    && rm -rf php-memcached \
+    && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.a /usr/lib/ \
+    && docker-php-ext-enable memcached \
+    && docker-php-ext-install -j$(nproc) opcache iconv  pdo_mysql pdo_dblib tidy
 
 # Adding layer for imagemagick. This adds A LOT of extra payload to this docker.
 # Remove it if you don't need it
 RUN apt-get update && apt-get install -y \
-    imagemagick libmagickwand-dev libmagickcore-dev  \
+    imagemagick libmagickwand-dev libmagickcore-dev jpegoptim optipng pngquant libcurl3-dev libicu-dev \
     && pecl install imagick \
     && docker-php-ext-enable imagick
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+RUN docker-php-ext-install -j$(nproc) gd soap zip opcache bcmath sockets curl intl mysqli
 
-RUN docker-php-ext-configure gd "${GD_FREETYPE_DIRECTIVE}" "${GD_JPEG_DIRECTIVE}"
-RUN docker-php-ext-install -j$(nproc) \
-    bcmath \
-    curl \
-    gd \
-    iconv \
-    intl \
-    mbstring \
-    mysqli \
-    opcache \
-    pdo_mysql \
-    soap \
-    sockets \
-    tidy \
-    zip ${PHP_ADDITIONAL_EXTENSIONS}
-
-# add ms sql server support for PDO
-RUN ln -s /usr/lib/x86_64-linux-gnu/libsybdb.a /usr/lib/ \
-    && docker-php-ext-install -j$(nproc) pdo_dblib
-
-RUN pecl install ${MEMCACHED_VERSION} \
-    && docker-php-ext-enable memcached
-
-RUN pecl install ${XDEBUG_VERSION} \
+RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
 
 ENV GOSU_VERSION 1.11
 RUN set -x \
-    && apt-get update && apt-get install -y --no-install-recommends gpg dirmngr ca-certificates wget && rm -rf /var/lib/apt/lists/* \
+    && apt-get update && apt-get install -y --no-install-recommends \
+     gpg-agent \
+     gpg dirmngr ca-certificates wget && rm -rf /var/lib/apt/lists/* \
     && dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')" \
     && wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch" \
     && wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc" \
@@ -83,6 +60,16 @@ RUN set -x \
     && gosu nobody true \
     && apt-get purge -y --auto-remove
 
+# pre-installing blackfire
+#RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
+#    && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/$version \
+#    && tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp
+
+# installing blackfire cli
+RUN mkdir -p /tmp/blackfire \
+    && curl -A "Docker" -L https://blackfire.io/api/v1/releases/client/linux_static/amd64 | tar zxp -C /tmp/blackfire \
+    && mv /tmp/blackfire/blackfire /usr/bin/blackfire \
+    && rm -Rf /tmp/blackfire
 
 COPY config/php.ini /usr/local/etc/php/
 COPY config/proxy.conf /usr/local/etc/php-fpm.d/
