@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+/opt/php-cs-fixer --config=/opt/php-cs-fixer/php-cs-fixer-config.php "$@"
