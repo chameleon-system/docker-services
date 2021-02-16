@@ -66,6 +66,7 @@ if [ ! -f ${LOCKFILE} ]; then
 	  fi
 
 	    echo "<RequireAny>
+	    AuthMerging And
 	    AuthName \"protected\"
 	    AuthUserFile /usr/local/apache2/conf/htuser
 	    AuthType Basic
